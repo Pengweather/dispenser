@@ -67,20 +67,20 @@ static void MX_ADC1_Init(void);
 /* USER CODE BEGIN 0 */
 
 static
-void gen_consec_nums(const uint16_t start,
-					 const uint16_t incre,
-					 	   uint16_t  *arr,
-					 const   size_t   len)
+void gen_consec_nums(const uint16_t  start,
+					           const uint16_t  incre,
+					 	               uint16_t *arr,
+					           const   size_t  len)
 {
 	if (arr == NULL)
 	{
-		return;
+    return;
 	}
 
 	size_t i;
 	uint16_t tmp = start;
 
-	for   (i = 0;
+	for (i = 0;
 		   i < len;
 		   i++)
 	{
@@ -136,8 +136,8 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	HAL_Delay(TIME);
+	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	  HAL_Delay(TIME);
 
     /* USER CODE BEGIN 3 */
   }
