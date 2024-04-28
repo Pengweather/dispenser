@@ -31,6 +31,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#ifdef 	NUM_STATES
+#undef 	NUM_STATES
+#endif
+
+#define NUM_STATES	16
 
 /* USER CODE END PD */
 
@@ -45,7 +50,8 @@ ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+static
+uint16_t states[NUM_STATES] = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,6 +65,29 @@ static void MX_ADC1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+static
+void gen_consec_nums(const uint16_t start,
+					 const uint16_t incre,
+					 	   uint16_t  *arr,
+					 const   size_t   len)
+{
+	if (arr == NULL)
+	{
+		return;
+	}
+
+	size_t i;
+	uint16_t tmp = start;
+
+	for   (i = 0;
+		   i < len;
+		   i++)
+	{
+		arr[i] = tmp;
+		tmp += incre;
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -93,18 +122,22 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
-  /* USER CODE BEGIN 2 */
 
+  /* USER CODE BEGIN 2 */
+  gen_consec_nums(5, 2, states, NUM_STATES);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  const
+  uint32_t TIME = 150;
+
   while (1)
   {
     /* USER CODE END WHILE */
 
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	HAL_Delay(1000);
+	HAL_Delay(TIME);
 
     /* USER CODE BEGIN 3 */
   }
@@ -268,15 +301,15 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pin   = B1_Pin;
+  GPIO_InitStruct.Mode  = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull  = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pin   = LD2_Pin;
+  GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull  = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
